@@ -4,10 +4,12 @@ import com.example.securityserver.dto.JoinDTO;
 import com.example.securityserver.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @ResponseBody
+@RequestMapping("/auth")
 public class JoinController {
 
     private final JoinService joinService;
