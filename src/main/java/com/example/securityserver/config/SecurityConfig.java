@@ -1,5 +1,6 @@
 package com.example.securityserver.config;
 
+import com.example.securityserver.jwt.JWTFilter;
 import com.example.securityserver.jwt.JWTUtil;
 import com.example.securityserver.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -61,6 +62,10 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/", "/join").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
+
+        //JWT 검증 Filter 추가
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
         http
