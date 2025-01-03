@@ -2,12 +2,14 @@ package com.example.securityserver.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Component
 public class JWTUtil {
     // jwt에서 이젠 string key 말고 SecretKey를 사용한다.
     private SecretKey secretKey;
