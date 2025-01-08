@@ -1,6 +1,7 @@
 package com.example.securityserver.service;
 
 import com.example.securityserver.jwt.JWTUtil;
+import com.example.securityserver.util.CookieUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,9 +61,11 @@ public class ReissueService {
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", username, role, 600000L);
+        String newRefresh = jwtUtil.createJwt("refresh", username, role, 60*60*24L);
 
         //response
         response.setHeader("access", newAccess);
+        response.addCookie(CookieUtil.createCookie("refresh", newRefresh));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

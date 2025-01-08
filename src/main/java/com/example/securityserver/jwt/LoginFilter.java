@@ -1,6 +1,7 @@
 package com.example.securityserver.jwt;
 
 import com.example.securityserver.dto.CustomUserDetails;
+import com.example.securityserver.util.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,7 +66,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //응답 설정
         response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+        response.addCookie(CookieUtil.createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
     }
 
@@ -74,15 +75,4 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(401);
     }
-
-    private Cookie createCookie(String key, String value){
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60*60*24);
-        // cookie.setSecure(true); //https
-        // cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
 }
