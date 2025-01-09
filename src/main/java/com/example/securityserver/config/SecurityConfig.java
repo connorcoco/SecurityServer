@@ -1,8 +1,10 @@
 package com.example.securityserver.config;
 
+import com.example.securityserver.jwt.CustomLogoutFilter;
 import com.example.securityserver.jwt.JWTFilter;
 import com.example.securityserver.jwt.JWTUtil;
 import com.example.securityserver.jwt.LoginFilter;
+import com.example.securityserver.repository.RefreshRepository;
 import com.example.securityserver.util.RefreshUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,12 +26,14 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshUtil refreshUtil;
+    private final RefreshRepository refreshRepository;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshUtil refreshUtil) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshUtil refreshUtil, RefreshRepository refreshRepository) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshUtil = refreshUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     //AuthenticationManager Bean 등록
@@ -74,6 +79,8 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshUtil), UsernamePasswordAuthenticationFilter.class);
 
+        http
+                .addFilterBefore(new CustomLogoutFilter(refreshRepository, jwtUtil), LogoutFilter.class);
         //세션 설정
         http
                 .sessionManagement((session) -> session
