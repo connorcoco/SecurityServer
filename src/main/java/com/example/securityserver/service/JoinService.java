@@ -28,11 +28,12 @@ public class JoinService {
             return;
         }
 
-        UserEntity data = new UserEntity();
-
-        data.setUsername(username);
-        data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setRole("ROLE_ADMIN");
+        // Entity 객체를 생성할 때 빌더 패턴 이용
+        UserEntity data = UserEntity.builder()
+                .username(username)
+                .password(bCryptPasswordEncoder.encode(password))
+                .role("ROLE_ADMIN")
+                .build();
 
         userRepository.save(data);
     }
