@@ -1,6 +1,6 @@
 package com.example.securityserver.apiPayload.code.status;
 
-import com.example.securityserver.apiPayload.code.BaseResponseCode;
+import com.example.securityserver.apiPayload.code.BaseCode;
 import com.example.securityserver.apiPayload.code.ResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorStatus implements BaseResponseCode {
+public enum ErrorStatus implements BaseCode {
 
     // 가장 일반적인 응답
     _INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 에러, 관리자에게 문의 바랍니다."),
@@ -19,7 +19,14 @@ public enum ErrorStatus implements BaseResponseCode {
 
     // 멤버 관려 에러
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
-    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
+    MEMBER_IS_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "사용자가 이미 존재합니다.."),
+    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4003", "닉네임은 필수 입니다."),
+
+    // 토큰 관련 에러
+    ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "TOKEN4001", "액세스 토큰이 만료되었습니다."),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "TOKEN4002", "리프레시 토큰이 만료되었습니다."),
+    INVALID_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "TOKEN4003", "토큰이 올바르지 않습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "TOKEN4004", "토큰이 올바르지 않습니다."),
 
 
     // 예시,,,
@@ -51,7 +58,6 @@ public enum ErrorStatus implements BaseResponseCode {
                 .code(code)
                 .isSuccess(false)
                 .httpStatus(httpStatus)
-                .build()
-                ;
+                .build();
     }
 }

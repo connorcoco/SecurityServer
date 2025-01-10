@@ -1,6 +1,6 @@
 package com.example.securityserver.apiPayload.code.status;
 
-import com.example.securityserver.apiPayload.code.BaseResponseCode;
+import com.example.securityserver.apiPayload.code.BaseCode;
 import com.example.securityserver.apiPayload.code.ResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum SuccessStatus implements BaseResponseCode {
+public enum SuccessStatus implements BaseCode {
 
     // 가장 일반적인 응답
     _OK(HttpStatus.OK, "COMMON200", "요청에 성공했습니다."),
@@ -23,7 +23,7 @@ public enum SuccessStatus implements BaseResponseCode {
         return ResponseDTO.builder()
                 .message(message)
                 .code(code)
-                .isSuccess(this == _OK)
+                .isSuccess(true)
                 .build();
     }
 
@@ -32,7 +32,7 @@ public enum SuccessStatus implements BaseResponseCode {
         return ResponseDTO.builder()
                 .message(message)
                 .code(code)
-                .isSuccess(this == _OK)
+                .isSuccess(true)
                 .httpStatus(httpStatus)
                 .build();
     }

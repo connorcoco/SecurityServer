@@ -1,5 +1,7 @@
 package com.example.securityserver.service;
 
+import com.example.securityserver.apiPayload.code.status.ErrorStatus;
+import com.example.securityserver.apiPayload.exception.GeneralException;
 import com.example.securityserver.converter.UserConverter;
 import com.example.securityserver.domain.entity.UserEntity;
 import com.example.securityserver.dto.UserRequestDTO;
@@ -22,9 +24,8 @@ public class JoinService {
 
         Boolean isExist = userRepository.existsByUsername(request.getUsername());
 
-        // todo: exception 구현 해야 함
         if(isExist){
-            return null;
+            throw new GeneralException(ErrorStatus.MEMBER_IS_EXIST);
         }
 
         // UserEntity 객체 converter를 통해 생성

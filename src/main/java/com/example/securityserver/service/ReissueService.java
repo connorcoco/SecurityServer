@@ -1,5 +1,7 @@
 package com.example.securityserver.service;
 
+import com.example.securityserver.apiPayload.code.status.ErrorStatus;
+import com.example.securityserver.apiPayload.exception.GeneralException;
 import com.example.securityserver.jwt.JWTUtil;
 import com.example.securityserver.repository.RefreshRepository;
 import com.example.securityserver.util.CookieUtil;
@@ -40,8 +42,7 @@ public class ReissueService {
 
         if (refresh == null) {
 
-            //response status code
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+            throw new GeneralException(ErrorStatus.INVALID_REFRESH_TOKEN);
         }
 
         //expired check
@@ -49,8 +50,7 @@ public class ReissueService {
             jwtUtil.isExpired(refresh);
         } catch (ExpiredJwtException e) {
 
-            //response status code
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_EXPIRED);
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
@@ -58,15 +58,14 @@ public class ReissueService {
 
         if (!category.equals("refresh")) {
 
-            //response status code
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+            throw new GeneralException(ErrorStatus.INVALID_REFRESH_TOKEN);
         }
 
         // DB에 저장되어 있는지 확인
         Boolean isExistRefresh = refreshRepository.existsByRefresh(refresh);
         if (!isExistRefresh) {
-            //response body
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+
+            throw new GeneralException(ErrorStatus.INVALID_REFRESH_TOKEN);
         }
 
         String username = jwtUtil.getUsername(refresh);

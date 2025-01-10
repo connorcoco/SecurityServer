@@ -1,6 +1,6 @@
 package com.example.securityserver.apiPayload;
 
-import com.example.securityserver.apiPayload.code.BaseResponseCode;
+import com.example.securityserver.apiPayload.code.BaseCode;
 import com.example.securityserver.apiPayload.code.status.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,13 +27,13 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, SuccessStatus._OK.getCode() , SuccessStatus._OK.getMessage(), result);
     }
 
-    public static <T> ApiResponse<T> of(BaseResponseCode code, T result){
+    public static <T> ApiResponse<T> of(BaseCode code, T result){
             return new ApiResponse<>(true, code.getReasonHttpStatus().getCode() , code.getReasonHttpStatus().getMessage(), result);
     }
 
 
     // 실패한 경우 응답 생성
     public static <T> ApiResponse<T> onFailure(String code, String message, T data){
-        return new ApiResponse<>(true, code, message, data);
+        return new ApiResponse<>(false, code, message, data);
     }
 }
