@@ -31,8 +31,8 @@ public class UserConverter {
         return UserEntity.builder()
                 .username(request.getUsername())
                 .password(bCryptPasswordEncoder.encode(request.getPassword()))
-                .role("ROLE_USER")
-                .accountStatus(AccountStatus.ACTIVE)
+//                .role("ROLE_USER")
+//                .accountStatus(AccountStatus.ACTIVE)
                 .nickname(request.getNickname())
                 .gender(request.getGender())
                 .build();
