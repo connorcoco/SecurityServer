@@ -24,7 +24,6 @@ public class UserController {
     @PostMapping("/join")
     public ApiResponse<UserResponseDTO.JoinResultDTO> joinProcess(@RequestBody UserRequestDTO.JoinDTO request){
 
-        System.out.println(request.getUsername());
         UserEntity newUser = joinService.joinProcess(request);
         return ApiResponse.onSuccess(UserConverter.toJoinResultDTO(newUser));
     }

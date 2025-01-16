@@ -1,6 +1,7 @@
 package com.example.securityserver.dto;
 
 import com.example.securityserver.domain.entity.UserEntity;
+import com.example.securityserver.domain.entity.enums.AccountStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -52,7 +53,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return userEntity.getAccountStatus() != AccountStatus.LOCKED;
     }
 
     @Override
@@ -62,6 +63,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userEntity.getAccountStatus() == AccountStatus.ACTIVE;
     }
 }

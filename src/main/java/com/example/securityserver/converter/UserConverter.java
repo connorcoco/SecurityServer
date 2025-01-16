@@ -1,6 +1,8 @@
 package com.example.securityserver.converter;
 
 import com.example.securityserver.domain.entity.UserEntity;
+import com.example.securityserver.domain.entity.enums.AccountStatus;
+import com.example.securityserver.domain.entity.enums.Gender;
 import com.example.securityserver.dto.UserRequestDTO;
 import com.example.securityserver.dto.UserResponseDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,8 +31,10 @@ public class UserConverter {
         return UserEntity.builder()
                 .username(request.getUsername())
                 .password(bCryptPasswordEncoder.encode(request.getPassword()))
-                .role("ROLE_ADMIN")
+                .role("ROLE_USER")
+                .accountStatus(AccountStatus.ACTIVE)
+                .nickname(request.getNickname())
+                .gender(request.getGender())
                 .build();
-
     }
 }
