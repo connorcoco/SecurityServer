@@ -34,7 +34,7 @@ public class UserConverter {
 //                .role("ROLE_USER")
 //                .accountStatus(AccountStatus.ACTIVE)
                 .nickname(request.getNickname())
-                .gender(request.getGender())
+                .gender(Gender.valueOf(request.getGender()))
                 .build();
     }
 }
