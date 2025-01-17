@@ -1,23 +1,43 @@
 package com.example.securityserver.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.securityserver.domain.common.BaseEntity;
+import com.example.securityserver.domain.entity.enums.AccountStatus;
+import com.example.securityserver.domain.entity.enums.Gender;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Setter
 @Getter
-public class UserEntity {
+@Builder
+@DynamicUpdate
+@DynamicInsert
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private String username;
+    @Column(nullable = false, length = 40)
+    private String username; // 실제로는 email값이 들어감
+
+    @Column(nullable = false)
     private String password;
 
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ROLE_USER'")
     private String role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'")
+    private AccountStatus accountStatus;
+
+    @Column(nullable = false, length = 20)
+    private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
 }

@@ -1,5 +1,7 @@
 package com.example.securityserver.jwt;
 
+import com.example.securityserver.apiPayload.code.status.ErrorStatus;
+import com.example.securityserver.apiPayload.exception.GeneralException;
 import com.example.securityserver.domain.entity.UserEntity;
 import com.example.securityserver.dto.CustomUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -37,30 +39,17 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
+        // 토큰 만료 여부 확인, 만료시 예외 발생
         try {
             jwtUtil.isExpired(accessToken);
-        } catch (ExpiredJwtException e){
-            //response body
-            PrintWriter writer = response.getWriter();
-            writer.print("access token expired");
-
-            //response status code
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+        } catch (ExpiredJwtException e) {
+            throw new GeneralException(ErrorStatus.ACCESS_TOKEN_EXPIRED);
         }
 
-        // 토큰이 access인지 확인 (발급시 페이로드에 명시)
+        // 토큰이 access인지 확인 (발급 시 페이로드에 명시)
         String category = jwtUtil.getCategory(accessToken);
-
-        if (!category.equals("access")){
-            //response body
-            PrintWriter writer = response.getWriter();
-            writer.print("invalid access token");
-
-            //response status code
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+        if (!category.equals("access")) {
+            throw new GeneralException(ErrorStatus.INVALID_ACCESS_TOKEN);
         }
 
         //토큰에서 username과 role 획득
@@ -68,9 +57,10 @@ public class JWTFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(accessToken);
 
         //userEntity를 생성하여 값 set
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(username);
-        userEntity.setRole(role);
+        UserEntity userEntity = UserEntity.builder()
+                .username(username)
+                .role(role)
+                .build();
 
         //UserDetails에 회원 정보 객체 담기 -> 스프링 시큐리티에서 요구하는 사용자 정보 형식을 따르기 위함
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);

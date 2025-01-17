@@ -1,7 +1,10 @@
 package com.example.securityserver.service;
 
+import com.example.securityserver.apiPayload.code.status.ErrorStatus;
+import com.example.securityserver.apiPayload.exception.GeneralException;
+import com.example.securityserver.converter.UserConverter;
 import com.example.securityserver.domain.entity.UserEntity;
-import com.example.securityserver.dto.JoinDTO;
+import com.example.securityserver.dto.UserRequestDTO;
 import com.example.securityserver.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,23 +20,17 @@ public class JoinService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void joinProcess(JoinDTO joinDTO){
+    public UserEntity joinProcess(UserRequestDTO.JoinDTO request){
 
-        String username = joinDTO.getUsername();
-        String password = joinDTO.getPassword();
-
-        Boolean isExist = userRepository.existsByUsername(username);
+        Boolean isExist = userRepository.existsByUsername(request.getUsername());
 
         if(isExist){
-            return;
+            throw new GeneralException(ErrorStatus.MEMBER_IS_EXIST);
         }
 
-        UserEntity data = new UserEntity();
+        // UserEntity 객체 converter를 통해 생성
+        UserEntity newUser = UserConverter.toUser(request, bCryptPasswordEncoder);
 
-        data.setUsername(username);
-        data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setRole("ROLE_ADMIN");
-
-        userRepository.save(data);
+        return userRepository.save(newUser);
     }
 }
