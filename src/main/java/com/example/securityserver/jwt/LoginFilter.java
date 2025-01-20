@@ -1,8 +1,10 @@
 package com.example.securityserver.jwt;
 
 import com.example.securityserver.dto.CustomUserDetails;
+import com.example.securityserver.dto.UserRequestDTO;
 import com.example.securityserver.util.CookieUtil;
 import com.example.securityserver.util.RefreshUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -34,19 +37,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+        try {
+            // JSON 바디에서 username과 password 추출
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserRequestDTO.LoginDTO loginRequest = null;
+            loginRequest = objectMapper.readValue(req.getInputStream(), UserRequestDTO.LoginDTO.class);
 
-        //클라이언트 요청에서 username, password 추출
-        String username = obtainUsername(req);
-        String password = obtainPassword(req);
+            String username = loginRequest.getUsername();
+            String password = loginRequest.getPassword();
 
-        // 스프링 시큐리티에서 username과 password를 검증하기 위해 token에 담는다.
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            // 스프링 시큐리티에서 username과 password를 검증하기 위해 token에 담는다.
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
-        // token에 담은 데이터를 검증을 위한 AuthenticationManager로 전달
-        // 이 메서드는 CustomUserDetailsService를 통해 사용자의 정보를 조회하고 검증합니다.
-        // CustomUserDetailsService와 CustomUserDetails를 통해 DB내의 사용자 정보를 조회하고 입력받은 authToken과 비교를 한다.
-        // 인증이 성공적으로 이루어지면, CustomUserDetails를 통해 사용자 정보와 권한을 제공한다.
-        return authenticationManager.authenticate(authToken);
+            // token에 담은 데이터를 검증을 위한 AuthenticationManager로 전달
+            // 이 메서드는 CustomUserDetailsService를 통해 사용자의 정보를 조회하고 검증합니다.
+            // CustomUserDetailsService와 CustomUserDetails를 통해 DB내의 사용자 정보를 조회하고 입력받은 authToken과 비교를 한다.
+            // 인증이 성공적으로 이루어지면, CustomUserDetails를 통해 사용자 정보와 권한을 제공한다.
+            return authenticationManager.authenticate(authToken);
+
+        } catch (IOException e) {
+            throw new AuthenticationException("입력 형식이 잘못됐습니다.", e) {};
+        }
     }
 
     // 로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)

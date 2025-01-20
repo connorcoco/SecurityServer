@@ -26,4 +26,15 @@ public class UserRequestDTO {
         @GenderValid
         private String gender;
     }
+
+    @Getter
+    public static class LoginDTO{
+
+        @NotEmpty
+        @Email(message = "Invalid email format")
+        private String username;
+
+        @NotEmpty
+        private String password;
+    }
 }
