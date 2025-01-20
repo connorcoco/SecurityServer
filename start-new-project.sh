@@ -24,12 +24,12 @@ cd $NEW_PROJECT_NAME || exit
 rm -rf .git
 
 # 파일 내용 치환
-echo " ~$OLD_PROJECT_NAMEME 이름을$NEW_PROJECT_NAMEME 로 변경 중..."
+echo "🔄 $OLD_PROJECT_NAME 이름을 $NEW_PROJECT_NAME 로 변경 중..."
 find . -type f -exec sed -i '' "s/$OLD_PROJECT_NAME/$NEW_PROJECT_NAME/g" {} +
 
 # 패키지 이름 치환
-OLD_PACKAGE_PATH="src/main/java/com/example/$(echo $OLD_PROJECT_NAME | tr '[:up>
-NEW_PACKAGE_PATH="src/main/java/com/example/$(echo $NEW_PROJECT_NAME | tr '[:up>
+OLD_PACKAGE_PATH="src/main/java/com/example/$(echo $OLD_PROJECT_NAME | tr '[:upper:]' '[:lower:]')"
+NEW_PACKAGE_PATH="src/main/java/com/example/$(echo $NEW_PROJECT_NAME | tr '[:upper:]' '[:lower:]')"
 mv "$OLD_PACKAGE_PATH" "$NEW_PACKAGE_PATH"
 
 # Git 초기화 및 원격 레포지토리 설정
@@ -41,4 +41,4 @@ git branch -M main
 git push -u origin main
 
 echo "✅ $NEW_PROJECT_NAME 프로젝트 생성 및 원격 레포지토리 연결 완료!"
-echo " ~B 프로젝트 경로:$($(p)d)"
+echo "📂 프로젝트 경로: $(pwd)"
