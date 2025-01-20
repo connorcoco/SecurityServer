@@ -134,3 +134,18 @@
 - [단일 토큰](https://github.com/connorcoco/SecurityServer/issues/1)
 - [다중 토큰](https://github.com/connorcoco/SecurityServer/issues/3)
 - [추가 세팅](https://github.com/connorcoco/SecurityServer/issues/5)
+
+
+## 📌연관 레포지토리
+
+### [Spring Security + Redis를 이용한 Refresh Token 관리](https://github.com/connorcoco/SecurityWithRedis)
+
+이 레포지토리는 **Spring Security**와 **Redis**를 활용하여 **refresh token**을 Redis에 저장하고 관리하는 방법을 다룹니다. JWT 기반 인증 시스템에서 **refresh token**을 Redis에 저장하고, 이를 통해 토큰 재발급 및 관리 기능을 효율적으로 처리할 수 있습니다.
+
+- **주요 기능**:
+  - **Refresh Token Redis 저장**: 클라이언트에서 받은 refresh token을 Redis에 저장하여 관리합니다.
+  - **토큰 검증 및 갱신**: Redis에 저장된 refresh token을 검증하고 유효한 경우 새로운 access token을 발급합니다.
+  - **Redis와의 연동**: Spring Boot 프로젝트에서 Redis를 설정하고, 이를 통한 데이터 관리 방법을 다룹니다.
+
+이 레포지토리는 **SecurityServer**와 연동하여 JWT 인증 및 refresh token을 Redis에서 관리하는 기능을 확장할 수 있는 템플릿을 제공합니다.
+
