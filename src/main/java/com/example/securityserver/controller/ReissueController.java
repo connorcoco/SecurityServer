@@ -20,7 +20,7 @@ public class ReissueController {
         this.reissueService = reissueService;
     }
 
-    @Operation(summary = "토큰 재발행", description = "refresh=refreshToken Cookie 요청")
+    @Operation(summary = "토큰 재발행", description = "refresh=refreshToken Cookie 요청 (Swagger에서는 쿠키 테스트 불가능하므로 포스트맨 사용 권장)")
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response){
         return reissueService.reissue(request, response);
