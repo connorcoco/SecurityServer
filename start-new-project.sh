@@ -32,6 +32,10 @@ OLD_PACKAGE_PATH="src/main/java/com/example/$(echo $OLD_PROJECT_NAME | tr '[:upp
 NEW_PACKAGE_PATH="src/main/java/com/example/$(echo $NEW_PROJECT_NAME | tr '[:upper:]' '[:lower:]')"
 mv "$OLD_PACKAGE_PATH" "$NEW_PACKAGE_PATH"
 
+OLD_PACKAGE_PATH="src/test/java/com/example/$(echo $OLD_PROJECT_NAME | tr '[:upper:]' '[:lower:]')"
+NEW_PACKAGE_PATH="src/test/java/com/example/$(echo $NEW_PROJECT_NAME | tr '[:upper:]' '[:lower:]')"
+mv "$OLD_PACKAGE_PATH" "$NEW_PACKAGE_PATH"
+
 # Git 초기화 및 원격 레포지토리 설정
 git init
 git remote add origin "$REMOTE_REPO_URL"
